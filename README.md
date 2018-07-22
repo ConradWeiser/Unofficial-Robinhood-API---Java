@@ -1,68 +1,162 @@
+# Unofficial Robinhood Api - Java Wrapper (AMPro Fork)
+### A Java wrapper providing easy access to the [Unofficial Robinhood Api](https://github.com/sanko/Robinhood).
 
+Thanks to [Conrad Weiser](https://github.com/ConradWeiser) for making
+[the orginal wrapper project](https://github.com/ConradWeiser/Unofficial-Robinhood-Api)
+. Without them, this fork would literally be impossible!
 
-# Unofficial Robinhood Api (Java Wrapper)
+__We have a [Discord](https://discordapp.com) server for the [Robninhood API
+community. Feel free to join and ask questions or chat about coding or
+whatever.](https://discord.gg/VF7FctD)__
 
-More documentation and features to come. 
+## Contents
+- [Installation](#INSTALL)
+    - [Dependencies](#DEPEN)
+- [Usage](#USAGE)
+- [RoadMap](#RDMP)
+- [Contributing](https://github.com/AquaticMasteryProductions/Robinhood-Api-Java/wiki/Contributing)
 
-A Java wrapper providing easy access to the [Unofficial Robinhood Api](https://github.com/sanko/Robinhood).
-
-Currently Implemented:
-
-* Logging users in and out
-* Get account information - [Click me for response contents](https://github.com/sanko/Robinhood/blob/master/Account.md#gather-list-of-accounts)
-* Getting information about tickers
-* Making orders
-* Get holdings user is currently invested in
-* More to come
-
-
+<a name='INSTALL'></a>
 ## Installation
+To install & use the Robinhood API, you can either install the latest
+[release](https://github.com/AquaticMasteryProductions/Robinhood-Api-Java/releases)
+, download the latest source code & build the project yourself,
+or use [JitPack](https://jitpack.io/) to add the repository to your
+gradle, maven, sbt, or leiningen.
+You can download the latest stable build
+[here](https://github.com/AquaticMasteryProductions/Robinhood-Api-Java/releases)
 
-Include the latest .jar file from the [Release Page](https://github.com/ConradWeiser/Unofficial-Robinhood-Api/releases) in your system build path.
+<a name='DEPEN'></a>
+#### The Robinhood API Depends on these projects & packages
+- [Open Unirest](https://github.com/OpenUnirest/unirest-java)
+- [Google's Gson](https://github.com/google/gson)
+- [Apache Commons IO](https://commons.apache.org/proper/commons-io/)
+- [Simple Logger For java (SL4J) (optional)](https://www.slf4j.org)
 
-Maven/Gradle options will probably become available in the future
+Sample Gradle build.gradle file:
+```gradle
+plugins {
+    id 'java'
+    id 'application'
+}
+sourceCompatibility = 1.8
 
+group 'my.group'
+version '1.0'
 
-## Usage
+repositories {
+    jcenter()
+    mavenCentral()
+    maven { url "https://jitpack.io" }
+}
 
-[Javadocs available - Click me!](https://conradweiser.github.io/Unofficial-Robinhood-Api/)
-This library is built with the intention of making extracting information from the Robinhood API as easy as possible. 
-
-Say for the following example, we want to get our account number, and how much buying power we have available
-
+dependencies {
+    implementation 'com.github.AquaticMasteryProductions:Robinhood-Api-Java:v0.8.3-alpha'
+    compile group: 'io.github.openunirest', name: 'unirest-java', version: '2.2.04'
+    compile group: 'commons-io', name: 'commons-io', version: '2.6'
+    compile 'com.google.code.gson:gson:2.8.5'
+    compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
+}
 ```
+
+For Maven:
+```maven
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+<dependency>
+    <groupId>com.github.AquaticMasteryProductions</groupId>
+    <artifactId>Robinhood-Api-Java</artifactId>
+    <version>v0.8.0-alpha</version>
+</dependency>
+<dependency>
+    <groupId>io.github.openunirest</groupId>
+    <artifactId>unirest-java</artifactId>
+    <version>2.3.04</version>
+</dependency>
+<dependency>
+    <groupId>org.slf4j</groupId>
+    <artifactId>slf4j-simple</artifactId>
+    <version>1.7.25</version>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>com.google.code.gson</groupId>
+    <artifactId>gson</artifactId>
+    <version>2.8.5</version>
+</dependency>
+<dependency>
+    <groupId>commons-io</groupId>
+    <artifactId>commons-io</artifactId>
+    <version>2.6</version>
+</dependency>
+```
+
+<a name='USAGE'></a>
+## Usage
+[We Have Javadocs!](https://aquaticmasteryproductions.github.io/Robinhood-Api-Java/)
+
+This library is built with the intention of making extracting information
+ from the Robinhood API as easy as possible.
+
+Say for the following example, we want to get our account number, and
+ how much buying power we have available
+
+```java
 //Providing a username and password automatically logs the instance into our account!
 RobinhoodApi api = new RobinhoodApi("username", "password");
-    
+
 //Make the request for all of the account information
 AccountElement accountData = api.getAccountData();
-    
+
 //Extract the data we want
 String accountNumber = accountData.getAccountNumber();
 Float buyingPower = accountData.getBuyingPower();
-    
+
 //Print to console!
-System.out.println(accountNumber + " : " + String.valueOf(buyingPower));
+System.out.println(accountNumber + " : " + buyingPower);
 ```
 
-### For more detailed instructions on usage, [Click me!](https://github.com/ConradWeiser/Unofficial-Robinhood-Api/blob/master/Usage.md)
+### [More detailed instructions on usage and Endpoint Data](https://github.com/AquaticMasteryProductions/Robinhood-Api-Java/wiki)
 
-## Things to do
 
-* Include a more comprehensive guide on what data you are getting from each method (Probably within the javadocs)
-* Continue implementing more of the working methods we have available
-* Streamline the library framework in general. Currently things work very well, but it's not perfect
-* Update this Readme so it's more pretty, and has more information. Consider this a v-0.1 as I continue to write the library
+<a name='RDMP'></a>
+## Roadmap
 
+- Multifactor Login
+- Orders full history (live and closed orders)
+- Asynchronous requests & RateLimiting
+- Clean up & add more JavaDocs
+    - Include a more comprehensive guide on what data you are getting from
+        each method.
+- Improved Wiki & Walkthroughs
+- Improve & clarify many vague exceptions
+- more...so much...more
+- ~~Logging users in and out~~
+- ~~Get account information~~
+- ~~Getting information about tickers~~
+- ~~Remoive singleton-type configuration~~
+~~Make &~~ cancel orders (limit, stop, etc)
+
+### Things that will likely *never* happen here
+- Transfering funds from bank accounts to Robinhood & visa versa.
+    - That's a *lot* of security
+    [we can't provide](https://www.youtube.com/watch?v=2bVhjOcz0s0)
+    (at least not now) and will leave it to Robinhood & their applications.
 
 ## Disclaimer
-I have never taken up a project working with APIs like this. I intend to write this wrapper to the best of my ability, and continue to give support/make changes as time passes.
+I have never taken up a project working with APIs like this.
+I intend to write this wrapper to the best of my ability, and continue to
+give support/make changes as time passes.
 
-I however am a student, and have never programmed in a professional enviroment. Things might seem a little messy until the library gets a little closer to completion.
+However, that being said, I aim to make the finished project both
+efficient in terms of how much computing power it requires, and easy for
+other developers to build functionality on top of.
 
-However, that being said, I aim to make the finished project both efficient in terms of how much computing power it requires, and easy for other developers to build functionality on top of. Stay tuned for future updates!
-____
+If you have any questions feel free to email AMPro at
+aquaticmasteryproductions@gmail.com
 
-If you have any questions, comments or suggestions, please do throw me an Email! 
-    
-    
+-- Jono

@@ -1,0 +1,56 @@
+{
+    "count":1,
+    "next":null,
+    "previous":null,
+    "results":[
+        {
+            "summary":{
+                "num_buy_ratings":45,
+                "num_hold_ratings":3,
+                "num_sell_ratings":0
+            },
+            "ratings":[
+                {
+                    "type":"buy",
+                    "text":"Alibaba's
+   China marketplaces boasted 552 million active buyers as of March, more than 40% of China’s
+   total population. We expect a long runway of user growth in the coming
+   years."
+                },
+                {
+                    "type":"sell",
+                    "text":"Despite its e-commerce leadership in China, expansion into
+   other regions outside Southeast Asia could pose obstacles due to the network effects of
+   established local marketplaces."
+                },
+                {
+                    "type":"buy",
+                    "text":"Alibaba stands to benefit from the
+   ongoing shift of China's digital commerce market from C2C to B2C, as Tmall can gain organic
+   user traffic from Taobao mobile and better monetize
+   transactions."
+                },
+                {
+                    "type":"sell",
+                    "text":"Alibaba has invested in businesses outside China that
+   might not enhance its ecosystem. This could divert management's attention from expanding its
+   core marketplaces and other businesses."
+                },
+                {
+                    "type":"sell",
+                    "text":"Rapid expansion of other China
+   digital commerce players like JD.com and Vipshop could constrain Alibaba's growth aspirations
+   in some product categories."
+                },
+                {
+                    "type":"buy",
+                    "text":"We believe the majority of Chinese online
+   shoppers born in the 1980s and 1990s consider Taobao as their first online shopping option,
+   implying exceptional lifetime value
+   potential."
+                }
+            ],
+            "instrument_id":"b2e06903-5c44-46a4-bd42-2a696f9d68e1"
+        }
+    ]
+}

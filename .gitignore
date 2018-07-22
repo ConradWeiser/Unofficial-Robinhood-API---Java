@@ -37,3 +37,6 @@ build/
 
 #Artifacts location
 classes/artifacts/
+/gradle/wrapper/gradle-wrapper.properties
+/.settings/
+/config.txt
