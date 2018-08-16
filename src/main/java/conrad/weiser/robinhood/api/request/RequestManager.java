@@ -1,18 +1,14 @@
 package conrad.weiser.robinhood.api.request;
 
-import java.util.Iterator;
-
 import com.google.gson.Gson;
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
-import com.mashape.unirest.request.GetRequest;
-import com.mashape.unirest.request.HttpRequestWithBody;
-
 import conrad.weiser.robinhood.api.ApiMethod;
-import conrad.weiser.robinhood.api.throwables.RobinhoodApiException;
 import conrad.weiser.robinhood.api.parameters.HttpHeaderParameter;
+import conrad.weiser.robinhood.api.throwables.RobinhoodApiException;
+import okhttp3.*;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.Iterator;
 
 
 public class RequestManager {
@@ -37,6 +33,12 @@ public class RequestManager {
 		
 		return RequestManager.instance;
 	}
+
+	public RequestManager(){
+		this.okClient = new OkHttpClient();
+	}
+
+	OkHttpClient okClient;
 	
 	
 	public <T> T makeApiRequest(ApiMethod method) throws RobinhoodApiException {
@@ -71,33 +73,35 @@ public class RequestManager {
 	/**
 	 * Method which uses OKHTTP to send a POST request to the specified URL saved
 	 * within the APIMethod class 
-	 * @throws UnirestException 
+	 * @throws MalformedURLException  Request URL is not formatted as a valid HTTP URL
 	 */
 	@SuppressWarnings("unchecked")
 	private <T> T makePostRequest(ApiMethod method) throws RobinhoodApiException {
 		
-		HttpRequestWithBody request = Unirest.post(method.getBaseUrl());
-		
+		RequestBody body = RequestBody.create(method.getMediaType(), method.getUrlParametersAsPostBody());
+		Request.Builder request = new Request.Builder();
 			
 		//Append each of the headers for the method
 		Iterator<HttpHeaderParameter> headerIterator = method.getHttpHeaderParameters().iterator();
 		while(headerIterator.hasNext()) {
 			
 			HttpHeaderParameter currentHeader = headerIterator.next();
-			request.header(currentHeader.getKey(), currentHeader.getValue());
+			request.addHeader(currentHeader.getKey(), currentHeader.getValue());
 		}
 
 		try {
             //Append the request body
-            request.body(method.getUrlParametersAsPostBody());
+            Request builtRequest = request.url(method.getUrl())
+					.post(body)
+					.build();
 
             //Make the request
-            HttpResponse<JsonNode> jsonResponse = request.asJson();
+            Response response = okClient.newCall(builtRequest).execute();
 
             //Parse the response with Gson
             Gson gson = new Gson();
-            String responseJsonString = jsonResponse.getBody().toString();
-
+            String responseJsonString = response.body().string();
+            
             //If the response type for this is VOID (Meaning we are not expecting a response) do not
             //try to use Gson
             if(method.getReturnType() == Void.TYPE)
@@ -106,11 +110,13 @@ public class RequestManager {
             T data = gson.fromJson(responseJsonString, method.getReturnType());
             return data;
 
-        } catch (UnirestException ex) {
+        } catch (MalformedURLException ex) {
 
-            System.err.println("[RobinhoodApi] Failed to communicate with Robinhood servers, request failed");
+            System.err.println("[RobinhoodApi] Malformed request URL");
 
-        }
+        } catch (IOException e) {
+			System.err.println("[RobinhoodAPI] Error connecting to Robinhood servers");
+		}
 
 		throw new RobinhoodApiException();
 		
@@ -119,41 +125,48 @@ public class RequestManager {
 	/**
 	 * Method which uses Unirest to send a GET request to the specified URL saved
 	 * within the ApiMethod class 
-	 * @throws UnirestException 
+	 * @throws MalformedURLException Request URL is not formatted as a valid HTTP URL
 	 */
 	private <T> T makeGetRequest(ApiMethod method) throws RobinhoodApiException {
-	
-		GetRequest request = Unirest.get(method.getBaseUrl());
+
+		RequestBody body = RequestBody.create(method.getMediaType(), method.getUrlParametersAsPostBody());
+		Request.Builder request = new Request.Builder();
 
 		//Append each of the headers for the method
 		Iterator<HttpHeaderParameter> headerIterator = method.getHttpHeaderParameters().iterator();
 		while(headerIterator.hasNext()) {
-			
+
 			HttpHeaderParameter currentHeader = headerIterator.next();
-			request.header(currentHeader.getKey(), currentHeader.getValue());
+			request.addHeader(currentHeader.getKey(), currentHeader.getValue());
 		}
 
 		try {
 
+			//Append the request body
+			Request builtRequest = request.url(method.getUrl())
+					.get()
+					.build();
+
 			//Make the request
-			HttpResponse<JsonNode> jsonResponse = request.asJson();
+			Response response = okClient.newCall(builtRequest).execute();
 
 			//Parse the response with Gson
 			Gson gson = new Gson();
-			String responseJsonString = jsonResponse.getBody().toString();
+			String responseJsonString = response.body().string();
 
 			T data = gson.fromJson(responseJsonString, method.getReturnType());
 
 			return data;
 
+		} catch (MalformedURLException e) {
 
-		} catch (UnirestException ex) {
+			System.err.println("[RobinhoodAPI] Malformed request URL");
 
+		} catch (IOException e) {
 			System.err.println("[RobinhoodApi] Failed to communicate with Robinhood servers, request failed");
-
 		}
 
-       throw new RobinhoodApiException();
+		throw new RobinhoodApiException();
 
 	}
 	

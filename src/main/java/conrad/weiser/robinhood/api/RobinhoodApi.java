@@ -121,7 +121,7 @@ public class RobinhoodApi {
 		
 			
 			//TODO: Implement multifactor authorization
-			ApiMethod method = new AuthorizeWithoutMultifactor(username, password);
+		ApiMethod method = new AuthorizeWithoutMultifactor(username, password);
 			
 			try {
 				

@@ -5,6 +5,7 @@ import conrad.weiser.robinhood.api.endpoint.authorize.Authentication;
 import conrad.weiser.robinhood.api.endpoint.authorize.data.Token;
 import conrad.weiser.robinhood.api.parameters.HttpHeaderParameter;
 import conrad.weiser.robinhood.api.request.RequestMethod;
+import okhttp3.MediaType;
 
 public class AuthorizeWithoutMultifactor extends Authentication {
 	
@@ -18,7 +19,8 @@ public class AuthorizeWithoutMultifactor extends Authentication {
 		
 		//We're going to want a Json response
 		this.addHttpHeaderParameter(new HttpHeaderParameter("Accept", "application/json"));
-		this.addHttpHeaderParameter(new HttpHeaderParameter("Content-Type", "application/x-www-form-urlencoded"));
+
+		this.mediaType = MediaType.parse("application/x-www-form-urlencoded");
 		
 		//This needs to be ran as POST
 		this.setMethod(RequestMethod.POST);

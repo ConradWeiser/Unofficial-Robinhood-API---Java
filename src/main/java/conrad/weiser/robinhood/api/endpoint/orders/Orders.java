@@ -1,17 +1,16 @@
 package conrad.weiser.robinhood.api.endpoint.orders;
 
-import com.mashape.unirest.http.exceptions.UnirestException;
 import conrad.weiser.robinhood.api.ApiMethod;
 import conrad.weiser.robinhood.api.endpoint.fundamentals.data.TickerFundamentalElement;
-import conrad.weiser.robinhood.api.endpoint.orders.enums.TimeInForce;
-import conrad.weiser.robinhood.api.endpoint.orders.throwables.InvalidTickerException;
-import conrad.weiser.robinhood.api.request.RequestMethod;
-import conrad.weiser.robinhood.api.throwables.RobinhoodApiException;
 import conrad.weiser.robinhood.api.endpoint.fundamentals.methods.GetTickerFundamental;
 import conrad.weiser.robinhood.api.endpoint.orders.data.SecurityOrderElement;
 import conrad.weiser.robinhood.api.endpoint.orders.enums.OrderTransactionType;
+import conrad.weiser.robinhood.api.endpoint.orders.enums.TimeInForce;
+import conrad.weiser.robinhood.api.endpoint.orders.throwables.InvalidTickerException;
 import conrad.weiser.robinhood.api.parameters.HttpHeaderParameter;
 import conrad.weiser.robinhood.api.request.RequestManager;
+import conrad.weiser.robinhood.api.request.RequestMethod;
+import conrad.weiser.robinhood.api.throwables.RobinhoodApiException;
 
 public class Orders extends ApiMethod {
 

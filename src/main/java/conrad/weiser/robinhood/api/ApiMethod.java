@@ -10,14 +10,20 @@ import conrad.weiser.robinhood.api.parameters.UrlParameter;
 import conrad.weiser.robinhood.api.request.RequestMethod;
 import conrad.weiser.robinhood.api.throwables.RobinhoodNotLoggedInException;
 import conrad.weiser.robinhood.api.parameters.HttpHeaderParameter;
+import okhttp3.MediaType;
 
 public abstract class ApiMethod {
 	
 	private final ConfigurationManager manager = ConfigurationManager.getInstance();
 	private String urlBase;
 	public final String service;
-	
-	
+
+
+	/**
+	 * The media type used by this request. Defaults to JSON and the UTF-8 Charset
+	 */
+	protected MediaType mediaType =  MediaType.parse("application/json; charset=utf-8");
+
 	/**
 	 * Constructor which stores the service which is being used
 	 */
@@ -128,6 +134,15 @@ public abstract class ApiMethod {
 			connectorValue = '&';
 		}
 		return new URL(builder.toString());
+	}
+
+	/**
+	 * Method returning the OKHTTP media type for this request.
+	 * This defaults normally to application/json and charset=utf-8
+	 * @return
+	 */
+	public MediaType getMediaType() {
+		return mediaType;
 	}
 	
 	/**
